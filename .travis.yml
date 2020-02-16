@@ -10,10 +10,10 @@ before_install:
     - curl https://sdk.cloud.google.com | bash > /dev/null;
     - source $HOME/google-cloud-sdk/path.bash.inc
     - gcloud components update kubectl
-    - gcloud auth activate-service-account --key-file service-account.json
+    - gcloud auth activate-service-account --key-file service-account.json || die "unable to authenticate service account for gcloud"
+    - gcloud beta auth application-default activate-service-account --key-file service-account.json || die "unable to authenticate service account for kubectl"
     - gcloud config set project multi-k8s-268311
     - gcloud config set compute/zone us-central1-a
-    - gcloud config set container/use_client_certificate false
     - gcloud container cluster get-credentials multi-cluster
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - docker build -t parashar1505/react-test -f ./client/Dockerfile.dev ./client
